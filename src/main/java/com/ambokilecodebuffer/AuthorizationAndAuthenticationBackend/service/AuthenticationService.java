@@ -51,7 +51,7 @@ public class AuthenticationService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Response<>(true, 9001, "Something went wrong");
+            return new Response<>(true, 9001, e.getMessage());
         }
     }
 
