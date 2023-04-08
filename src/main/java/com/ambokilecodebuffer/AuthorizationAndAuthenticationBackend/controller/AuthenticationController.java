@@ -21,7 +21,7 @@ public class AuthenticationController {
     }
     @CrossOrigin(origins = "http://0.0.0.0:*")
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
+    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request){
         log.info("SignUp operation process performed inside login method of AuthenticationController");
         return ResponseEntity.ok(authenticationService.authenticate(request));
 

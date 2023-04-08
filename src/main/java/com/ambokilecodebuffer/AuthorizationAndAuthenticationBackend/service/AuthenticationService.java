@@ -54,17 +54,23 @@ public class AuthenticationService {
         }
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+    public Response<?> authenticate(AuthenticationRequest request) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+            var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+            var jwtToken = jwtService.generateToken(user);
+            var userData = AuthenticationResponse.builder()
+                    .token(jwtToken)
+                    .build();
+            return new Response<>(false, 9000, userData, "User login successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response<>(true, 9001, "Email exist");
+        }
     }
 }

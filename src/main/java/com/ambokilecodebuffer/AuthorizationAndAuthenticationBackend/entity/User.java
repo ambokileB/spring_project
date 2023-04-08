@@ -23,18 +23,18 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    @Column(name = "userId", length = 300)
+    @Column(name = "userId")
     private String userId;
-    @Column(name = "first_name", length = 300)
+    @Column(name = "first_name", length = 30)
     private String firstName;
-    @Column(name = "last_name", length = 300)
+    @Column(name = "last_name", length = 30)
     private String lastName;
 
-    @Column(name = "phone_number", length = 200)
+    @Column(name = "phone_number", length = 13)
     private Integer phoneNumber;
-    @Column(name = "Email_Address", length = 200)
+    @Column(name = "Email_Address", length = 60, unique = true)
     private String email;
-    @Column(name = "password", length = 200)
+    @Column(name = "password", length = 20)
     private String password;
     @Column(name = "role", length = 200)
     @Enumerated(EnumType.STRING)
