@@ -65,10 +65,10 @@ public class AuthenticationService {
             );
             var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
             var jwtToken = jwtService.generateToken(user);
-            var userData = AuthenticationResponse.builder()
+            var userLoginData = AuthenticationResponse.builder()
                     .token(jwtToken)
                     .build();
-            return new Response<>(false, ResponseData.SUCCESS, userData, "User login successfully");
+            return new Response<>(false, ResponseData.SUCCESS, userLoginData, "User login successfully");
         } catch (Exception e) {
             e.printStackTrace();
             return new Response<>(true, 9001, e.getMessage());
