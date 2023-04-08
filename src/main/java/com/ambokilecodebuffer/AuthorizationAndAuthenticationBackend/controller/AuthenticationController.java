@@ -15,7 +15,7 @@ public class AuthenticationController {
 
     @CrossOrigin(origins = "http://0.0.0.0:*")
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request){
         log.info("registration operation process performed inside register method of AuthenticationController");
         return ResponseEntity.ok(authenticationService.register(request));
     }

@@ -4,6 +4,7 @@ import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.config.JwtSe
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.controller.AuthenticationRequest;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.controller.AuthenticationResponse;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.controller.RegisterRequest;
+import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.entity.Response;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.entity.Role;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.entity.User;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.repository.UserRepository;
@@ -13,6 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -20,23 +23,35 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    public AuthenticationResponse register(RegisterRequest request) {
-        var user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .phoneNumber(request.getPhoneNumber())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
-                .build();
-        userRepository.save(user);
 
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .email(request.getEmail())
-                .firstName(request.getFirstName())
-                .build();
+    public Response<?> register(RegisterRequest request) {
+        try {
+            Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+            if (optionalUser.isPresent()) {
+                return new Response<>(true, 9001, "Email exist");
+            } else {
+                var user = User.builder()
+                        .firstName(request.getFirstName())
+                        .lastName(request.getLastName())
+                        .phoneNumber(request.getPhoneNumber())
+                        .email(request.getEmail())
+                        .password(passwordEncoder.encode(request.getPassword()))
+                        .role(Role.USER)
+                        .build();
+                userRepository.save(user);
+
+                var jwtToken = jwtService.generateToken(user);
+                var userData = AuthenticationResponse.builder()
+                        .token(jwtToken)
+                        .email(request.getEmail())
+                        .firstName(request.getFirstName())
+                        .build();
+                return new Response<>(false, 9000, userData, "User registered successfully");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response<>(true, 9001, "Something went wrong");
+        }
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
