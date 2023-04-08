@@ -11,7 +11,7 @@ public class DemoController {
         return ResponseEntity.ok("Hello there this is productlist api");
     }
 
-    @GetMapping(path = "/test/demo-controller")
+    @GetMapping(path = "/api/v1/demo-controller")
     public ResponseEntity<String> sayHell() {
         return ResponseEntity.ok("Hello there this is productlist api");
     }
