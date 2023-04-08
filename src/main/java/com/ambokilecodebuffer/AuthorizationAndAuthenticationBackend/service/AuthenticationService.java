@@ -70,7 +70,7 @@ public class AuthenticationService {
             return new Response<>(false, 9000, userData, "User login successfully");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Response<>(true, 9001, "Email exist");
+            return new Response<>(true, 9001, e.getMessage());
         }
     }
 }
