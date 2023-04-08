@@ -5,6 +5,7 @@ import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.controller.A
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.controller.AuthenticationResponse;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.controller.RegisterRequest;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.entity.Response;
+import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.entity.ResponseData;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.entity.Role;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.entity.User;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.repository.UserRepository;
@@ -67,7 +68,7 @@ public class AuthenticationService {
             var userData = AuthenticationResponse.builder()
                     .token(jwtToken)
                     .build();
-            return new Response<>(false, 9000, userData, "User login successfully");
+            return new Response<>(false, ResponseData.SUCCESS, userData, "User login successfully");
         } catch (Exception e) {
             e.printStackTrace();
             return new Response<>(true, 9001, e.getMessage());

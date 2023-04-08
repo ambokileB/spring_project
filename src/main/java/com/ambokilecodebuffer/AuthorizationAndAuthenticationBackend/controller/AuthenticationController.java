@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
-    @CrossOrigin(origins = "http://0.0.0.0:*")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request){
         log.info("registration operation process performed inside register method of AuthenticationController");
         return ResponseEntity.ok(authenticationService.register(request));
     }
-    @CrossOrigin(origins = "http://0.0.0.0:*")
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request){
         log.info("SignUp operation process performed inside login method of AuthenticationController");
