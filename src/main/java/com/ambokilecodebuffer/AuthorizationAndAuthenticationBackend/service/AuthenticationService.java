@@ -3,6 +3,7 @@ package com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.service;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.config.JwtService;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.controller.AuthenticationRequest;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.controller.AuthenticationResponse;
+import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.controller.LoginResponse;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.controller.RegisterRequest;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.entity.Response;
 import com.ambokilecodebuffer.AuthorizationAndAuthenticationBackend.entity.ResponseData;
@@ -46,6 +47,9 @@ public class AuthenticationService {
                         .token(jwtToken)
                         .email(request.getEmail())
                         .firstName(request.getFirstName())
+                        .phoneNumber(request.getPhoneNumber())
+                        .lastName(request.getLastName())
+
                         .build();
                 return new Response<>(false, 9000, userData, "User registered successfully");
             }
@@ -61,12 +65,17 @@ public class AuthenticationService {
                     new UsernamePasswordAuthenticationToken(
                             request.getEmail(),
                             request.getPassword()
+//                            request.getFirstName()
                     )
             );
             var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+
             var jwtToken = jwtService.generateToken(user);
-            var userLoginData = AuthenticationResponse.builder()
+//            var userLoginData = AuthenticationResponse.builder()
+            var userLoginData = LoginResponse.builder()
+
                     .token(jwtToken)
+                    .email(request.getEmail())
                     .build();
             return new Response<>(false, ResponseData.SUCCESS, userLoginData, "User login successfully");
         } catch (Exception e) {
